@@ -1,9 +1,10 @@
-# Demo app. PyTorch is installed separately (CPU build), see README.
+# Used by Streamlit Community Cloud (demo mode: prepared .npz volumes, CPU only).
+# The full requirements for raw scans are in the repository root (requirements.txt).
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+torchvision
 streamlit
 numpy
 scipy
 nibabel
 matplotlib
-antspyx==0.6.3
-antspynet
-tensorflow-cpu
