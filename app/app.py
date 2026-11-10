@@ -1,17 +1,34 @@
-import os, tempfile
+import os, sys, tempfile, importlib.util
+from pathlib import Path
 import numpy as np, streamlit as st
 import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import inference as inf
 
 st.set_page_config(page_title="MRI dementia screening demo", layout="wide")
+
+# download the trained weights from the GitHub Release on first start (skipped if already there)
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE)); sys.path.insert(0, str(HERE.parent / "scripts"))
+import fetch_weights
+if not all((HERE.parent / "weights" / f).exists() for f in ("config.json", "template.npy", "extra.json")):
+    with st.spinner("First start: downloading the trained models (about 650 MB), please wait..."):
+        fetch_weights.main()
+import inference as inf
+
+HAS_ANTS = all(importlib.util.find_spec(m) is not None for m in ("ants", "antspynet"))
+
 st.title("Age-Controlled Alzheimer's Disease Detection from Structural MRI")
 st.caption("Multi-view 2.5D ResNet-18 ensemble · trained on OASIS-1 (ages 60+) · research demo of a conference paper")
 st.warning("**Research prototype. Not a medical device and not for diagnosis.** "
            "The model was trained and tested only on OASIS data (AUC 0.751 in cross-validation, 0.852 on OASIS-2). "
            "Very mild dementia (CDR 0.5) is often missed.")
 
-up = st.file_uploader("Upload a T1-weighted brain MRI (.nii or .nii.gz). Ages 60+ only; standard orientation.", type=["nii", "gz", "npz"])
+if HAS_ANTS:
+    up = st.file_uploader("Upload a T1-weighted brain MRI (.nii or .nii.gz), or an already prepared .npz volume. Ages 60+ only; standard orientation.", type=["nii", "gz", "npz"])
+else:
+    st.info("Online demo mode: raw-scan preprocessing (ANTs + TensorFlow) is not available on this free hosting. "
+            "Upload an already prepared volume (.npz, key 'vol', 176x208x176). Raw .nii scans work when the app runs locally or in Docker (see the README).")
+    up = st.file_uploader("Upload a prepared brain volume (.npz)", type=["npz"])
 st.caption("Uploaded files are processed in memory/temp storage and deleted right after the run. Do not upload data that identifies a person.")
 
 if up is not None and st.button("Run analysis", type="primary"):
