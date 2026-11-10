@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "Age-Controlled Alzheimer's Disease Detection from Structural MRI Using a Multi-View 2.5D CNN Ensemble with Subject-Level and External Validation"
+type: software
+authors:
+  - family-names: "Abir"
+    given-names: "Chayan Mondal"
+    affiliation: "SRM Institute of Science and Technology, Kattankulathur, India"
+  - family-names: "Santhiya"
+    given-names: "P"
+    affiliation: "SRM Institute of Science and Technology, Kattankulathur, India"
+repository-code: "https://github.com/chayanmondalabir/alzheimers-mri-multiview"
+license: MIT

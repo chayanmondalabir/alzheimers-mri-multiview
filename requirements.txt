@@ -1,0 +1,9 @@
+# Demo app. PyTorch is installed separately (CPU build), see README.
+streamlit
+numpy
+scipy
+nibabel
+matplotlib
+antspyx==0.6.3
+antspynet
+tensorflow-cpu

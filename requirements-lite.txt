@@ -1,0 +1,8 @@
+# Enough to run the app on already-prepared .npz volumes (no skull-stripping; works on a Mac).
+streamlit
+numpy
+scipy
+nibabel
+matplotlib
+torch
+torchvision
